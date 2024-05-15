@@ -1,5 +1,6 @@
 # Program to generate Markdown from ScrapBox Text
 ScrapBoxのテキストをMarkdownに変換するツールです。  
-ScrapBoxの装飾を引き継ぎます。
+ScrapBoxの装飾を引き継ぎます。  
 
-aaaaa
+※注意※
+* 画像は非対応
