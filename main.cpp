@@ -18,6 +18,7 @@ void convert_to_MD(string target_file, string output_file_name){
     fstream input_file;
     fstream output_file;
     string line;
+    bool check_first_line = true;
  
 
  /*
@@ -41,13 +42,39 @@ void convert_to_MD(string target_file, string output_file_name){
     };
 
     input_file.open(target_file);
-    output_file.open(output_file_name, ios::out | ios::app); //ファイルが存在しなければ作成する
+    // output_file.open(output_file_name, ios::out | ios::app); //結果出力ファイル (ファイルが存在しなければ作成する)
+    output_file.open(output_file_name); //デバッグ用
 
     if(!input_file.is_open() || !output_file.is_open()){
         cerr << "ファイルが開けませんでした" << endl;
     } else{
         while (getline(input_file, line)){
+            // ページタイトル
+            if(check_first_line){
+                check_first_line = false;
+                line = line + '\n';
+                regex first_line_pattern("(.*)\n");
+                string first_line_replacement = "# $1  ";
+                output_file << regex_replace(line, first_line_pattern, first_line_replacement) << endl;
+                continue;
+            }
 
+            //文字列先頭の空白の数をチェック
+            int space_counter = 0;
+            regex space_pattern("\\s.*");
+            if(regex_match(line, space_pattern)){
+                for(int i=0; i<line.size(); i++){
+                    char checker = line[i];
+                    if(checker == 0x20){
+                        space_counter++;
+                        // cout << "SPACE!!!" << space_counter << endl;
+                    }else{
+                        break;
+                    }
+                }
+            }
+
+            //文字装飾のチェック
             for (int i=0; i<convertion_pairs.size(); i++) {
                 regex match_pattern(convertion_pairs[i].first);
                 if(regex_match(line, match_pattern)){
