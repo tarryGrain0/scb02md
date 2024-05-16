@@ -62,15 +62,26 @@ void convert_to_MD(string target_file, string output_file_name){
             //文字列先頭の空白の数をチェック
             int space_counter = 0;
             regex space_pattern("\\s.*");
+            cout << line << endl;
             if(regex_match(line, space_pattern)){
                 for(int i=0; i<line.size(); i++){
                     char checker = line[i];
-                    if(checker == 0x20){
+                    if(checker == 0x20 || checker == '\t'){ //スペースまたはTabにする スペースは半角じゃないかも？　全角スペースを置き換える必要あり
                         space_counter++;
-                        // cout << "SPACE!!!" << space_counter << endl;
                     }else{
+                        cout << space_counter << endl;
                         break;
                     }
+                }
+            }
+
+            if(space_counter > 0){
+                regex space_remove_pattern("\\s*(.*)");
+                string space_replacement = "* $1";
+                line = regex_replace(line, space_remove_pattern, space_replacement);
+                for(int j=0; j<space_counter; j++){
+                    line = "  " + line;
+                    cout << line << endl;
                 }
             }
 
