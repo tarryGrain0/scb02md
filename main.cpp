@@ -38,7 +38,7 @@ void convert_to_MD(string target_file, string output_file_name){
         {"(.*)\\[\\*\\*(\\s.*)\\](.*)", "$1###$2$3  "},
         {"(.*)\\[\\*\\*\\*(\\s.*)\\](.*)", "$1##$2$3  "},
         {"(.*)\\[\\*\\*\\*\\*(\\s.*)\\](.*)", "$1#$2$3  "},
-        {"(.*)", "$1  "}
+        {"(.*)", "$1  "},
     };
 
     input_file.open(target_file);
@@ -61,27 +61,30 @@ void convert_to_MD(string target_file, string output_file_name){
 
             //文字列先頭の空白の数をチェック
             int space_counter = 0;
-            regex space_pattern("\\s.*");
-            cout << line << endl;
+            // regex space_pattern("\\s.*");
+            regex space_pattern("^(\\s|\u3000).*");
             if(regex_match(line, space_pattern)){
                 for(int i=0; i<line.size(); i++){
                     char checker = line[i];
-                    if(checker == 0x20 || checker == '\t'){ //スペースまたはTabにする スペースは半角じゃないかも？　全角スペースを置き換える必要あり
+                    if(checker == 0x20 || checker == '\t'){ 
                         space_counter++;
                     }else{
-                        cout << space_counter << endl;
+                        // cout << space_counter << endl;
                         break;
                     }
                 }
             }
 
             if(space_counter > 0){
-                regex space_remove_pattern("\\s*(.*)");
+                // regex space_remove_pattern("\\s*(.*)");
+                regex space_remove_pattern("^\\s*(.*?)(\\s*\\*)?$");
                 string space_replacement = "* $1";
+                cout << line << endl;
                 line = regex_replace(line, space_remove_pattern, space_replacement);
+                cout << line << endl;
                 for(int j=0; j<space_counter; j++){
                     line = "  " + line;
-                    cout << line << endl;
+                    // cout << line << endl;
                 }
             }
 
