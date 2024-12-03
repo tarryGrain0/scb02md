@@ -79,9 +79,9 @@ void convert_to_MD(string target_file, string output_file_name){
                 // regex space_remove_pattern("\\s*(.*)");
                 regex space_remove_pattern("^\\s*(.*?)(\\s*\\*)?$");
                 string space_replacement = "* $1";
-                cout << line << endl;
+                // cout << line << endl;
                 line = regex_replace(line, space_remove_pattern, space_replacement);
-                cout << line << endl;
+                // cout << line << endl;
                 for(int j=0; j<space_counter; j++){
                     line = "  " + line;
                     // cout << line << endl;
