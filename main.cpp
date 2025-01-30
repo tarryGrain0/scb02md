@@ -29,13 +29,13 @@ void convert_to_MD(string target_file, string output_file_name){
     };
 
     input_file.open(target_file);
-    output_file.open(output_file_name, ios::out | ios::app); //結果出力ファイル (ファイルが存在しなければ作成する)
+    output_file.open(output_file_name); //デバッグ用
 
     if(!input_file.is_open() || !output_file.is_open()){
         cerr << "ファイルが開けませんでした" << endl;
     } else{
         while (getline(input_file, line)){
-            //ページタイトルの変換
+            // ページタイトル
             if(check_first_line){
                 check_first_line = false;
                 line = line + '\n';
@@ -52,8 +52,11 @@ void convert_to_MD(string target_file, string output_file_name){
                 wchar_t checker = line[i];
                 if(checker == 0x20 || checker == '\t'){ 
                     space_counter++;
+                }else{
+                    break;
                 }
             }
+
 
             //空白の数に応じて文字列を変換
             if(space_counter > 0){
